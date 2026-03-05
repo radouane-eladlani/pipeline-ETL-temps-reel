@@ -1,0 +1,17 @@
+# Construction de l'image docker contenant tout l’environnement nécessaire pour producer 
+FROM python:3.9-slim
+
+# Tous les commande s'executeron  dans le  dossier app
+WORKDIR /app
+
+# On copie le fichier producer_tickets.py depuis la machine hôte vers le conteneur
+# Le point '.' signifie le dossier courant, ici /app
+COPY producer_tickets.py .
+
+# On installe la librairie kafka-python nécessaire pour envoyer des tickets vers Redpanda/Kafka
+# Cette commande s'exécute dans le conteneur et installe le package pour Python
+RUN pip install kafka-python
+
+# Commande qui sera exécutée lorsque le conteneur démarre
+# Lance le script producer_tickets.py pour commencer à produire des tickets
+CMD ["python", "producer_tickets.py"]

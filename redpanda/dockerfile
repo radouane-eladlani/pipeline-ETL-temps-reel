@@ -1,0 +1,18 @@
+# ------------------------------------------------------------
+# Dockerfile Redpanda
+#
+# Cette image est basée sur l'image officielle Redpanda.
+# Pour le moment, elle ne contient aucune modification
+# supplémentaire par rapport à l’image officielle.
+
+# Elle pourra être utile plus tard si nous souhaitons :
+# - Ajouter une configuration personnalisée (redpanda.yaml)
+# - Précréer automatiquement des topics au démarrage
+# - Ajouter des scripts d'initialisation
+# - Configurer la sécurité (TLS)
+
+# Actuellement, l'image officielle utilisée dans docker-compose
+# suffit pour le fonctionnement du projet.
+# ------------------------------------------------------------
+
+FROM docker.redpanda.com/redpandadata/redpanda:v23.2.8

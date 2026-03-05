@@ -1,0 +1,115 @@
+version: "3.9"
+
+networks:
+  redpanda_network:
+    driver: bridge
+
+volumes:
+  redpanda-0:
+  spark-ivy-cache:
+    driver: local
+
+services:
+
+  # =============================
+  # REDPANDA (Kafka)
+  # =============================
+  redpanda-0:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.2.8
+    container_name: redpanda-0
+    command:
+      - redpanda
+      - start
+      - --kafka-addr=PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr=PLAINTEXT://redpanda-0:9092
+      - --pandaproxy-addr=internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr=internal://redpanda-0:8082,external://localhost:18082
+      - --schema-registry-addr=internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr=redpanda-0:33145
+      - --advertise-rpc-addr=redpanda-0:33145
+      - --mode=dev-container
+      - --smp=1
+      - --default-log-level=info
+    volumes:
+      - redpanda-0:/var/lib/redpanda/data
+    networks:
+      - redpanda_network
+    ports:
+      - 19092:9092
+      - 18082:8082
+      - 18081:8081
+      - 9644:9644
+
+  # =============================
+  # INIT TOPIC
+  # =============================
+  init-topic:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: init-topic
+    networks:
+      - redpanda_network
+    depends_on:
+      - redpanda-0
+    entrypoint: >
+      sh -c " echo 'Attente que Redpanda soit prêt...'; until rpk cluster info --brokers redpanda-0:9092 > /dev/null 2>&1; do
+        sleep 2;
+      done; echo 'Création du topic si nécessaire...'; rpk topic create client_tickets --brokers redpanda-0:9092 --if-not-exists; echo 'Topic prêt.'; "
+
+  # =============================
+  # CONSOLE (optionnel)
+  # =============================
+  console:
+    container_name: redpanda-console
+    image: docker.redpanda.com/redpandadata/console:v3.5.1
+    networks:
+      - redpanda_network
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda-0:9092"]
+        schemaRegistry:
+          enabled: true
+          urls: ["http://redpanda-0:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda-0:9644"]
+    ports:
+      - 8080:8080
+    depends_on:
+      - redpanda-0
+
+  # =============================
+  # SPARK STREAMING
+  # =============================
+  spark:
+    build:
+      context: ./spark
+    container_name: spark
+    networks:
+      - redpanda_network
+    depends_on:
+      - init-topic
+    volumes:
+      - spark-ivy-cache:/root/.ivy2
+      - ./output:/app/output
+    environment:
+      # On ajoute le package Kafka pour Spark
+      PYSPARK_SUBMIT_ARGS: >
+        --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 pyspark-shell
+
+  # =============================
+  # PRODUCER
+  # =============================
+  producer:
+    build:
+      context: ./producer
+    container_name: producer
+    networks:
+      - redpanda_network
+    depends_on:
+      - spark
+    command: sh -c "sleep 30 && python producer_tickets.py"
