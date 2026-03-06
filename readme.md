@@ -26,3 +26,6 @@ Le pipeline suit les étapes suivantes :
 # Diagramme du pipeline (Mermaid)
 
 ![Pipeline ETL](diagramme_pipeline.png)
+
+# Presentation du projet
+https://www.loom.com/share/85907b4d39d84e6c807cfb4e2240631b
