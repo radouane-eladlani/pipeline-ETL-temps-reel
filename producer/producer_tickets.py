@@ -56,7 +56,7 @@ while True:
             break
     except Exception as e:
         pass
-    time.sleep(2)  # vérifie toutes les 2 secondes
+    time.sleep(2)
 
 # Création du producer Kafka
 producer = KafkaProducer(
@@ -106,7 +106,6 @@ def generer_ticket():
         "client_id": random.randint(1000, 9999),
 
         # On enregistre la date et l'heure actuelles.
-        # Format lisible : 2026-02-24 14:30:12
         "creation_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 
         # Texte fixe pour simuler une demande.

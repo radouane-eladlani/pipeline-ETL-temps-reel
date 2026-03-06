@@ -67,7 +67,7 @@ df_raw = spark.readStream \
 # Kafka envoie les données sous forme de bytes
 # Spark voit deux colonnes principales :
 # - key
-# - value (qui contient ton JSON)
+# - value
 
 
 # ===============================
@@ -177,7 +177,6 @@ query_transformed = (
 
 
     .start()  
-        # démarre l’écriture en continu
 )
 
 
