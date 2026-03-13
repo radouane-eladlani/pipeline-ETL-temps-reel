@@ -25,7 +25,7 @@ Le pipeline suit les étapes suivantes :
 
 # Diagramme du pipeline (Mermaid)
 
-https://mermaid.live/edit#pako:eNptkM-O2jAQxl_FmjNLSQiB5FCJhd0eKlWocGqMKjeeJBbJOOs_ainigXgOXmxN2FX30JP9aeb3fTNzglJLhByqVv8uG2Ec2605cVoWG6OlL9GwzdE1mjinnSoP6CwrW4UUXqs6314vds_p4eEzeyy-o-wFScE-sa-iOogbo3tVvhE_3d1gfwt4ZDdmVWyO216YA9s6g6JTVA_V1VBdFzsjyFbadMIpTUyiZVITXS9og_nSWlXTvXS9vHjVI7O-77VxH1yeimVtrpd66AvUN939Mhi82Ns8LAzA3LHHAVoP0HPxrMpGobFsI8yLR_fhAO59qvvynJ4G5sv_mK0LudapIO0eRlAbJSF3xuMIOgyL3SScODHGwTXYIYc8fCVWwreOA6dzwMJdf2jdvZNG-7qBvBKtDcr3UjhcK1Eb8a8FSaJZaU8O8tngAPkJ_kAeJ_E4mmWzKI6ydDGJkxEcIU-ScZKkUTpdzOfTNEum5xH8HSIn43QRT-ZRlGTTJIujOD2_An0AxKo
+https://mermaid.ai/app/projects/521c69d1-8e43-46e4-9d6f-7b8da0ad93c2/diagrams/789e945d-5868-4a35-a17d-12c2ad71d16a/version/v0.1/edit
 
 # Presentation du projet
 https://www.loom.com/share/85907b4d39d84e6c807cfb4e2240631b
